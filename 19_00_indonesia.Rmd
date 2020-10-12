@@ -50,7 +50,8 @@ Obtaining the beneficiary list data from the Unified Database (UDB) was key to i
 
 Importantly, this is very sensitive data, as it includes the names and addresses of individuals, along with their income and assets. Therefore, both the government and the researchers instituted strong data sharing and storage protocols to ensure that the information was protected. First, the research team obtained institutional review board (IRB) approvals on processes to use, store, and handle data. Second, only two local staff members from the research team accessed and handled the identified beneficiary data, and both were required to sign non-disclosure agreements with the government. Third, all data with personally identified information were stored in encrypted folders, and personal identifiers were removed from the data as soon as possible. After the UDB data were merged to the endline survey data, all personal identifiers were stripped from the files by select team members, and only de-identified data were shared with the rest of team for analysis.
 
-```{r indonesiafigure1, echo=FALSE, out.width='100%', fig.cap='Sample Raskin cards^[Note: the names in these sample cards are fictitious and for demonstration purposes only.] [@banerjee2018]'}
+```{r indonesiafigure1, echo=FALSE, out.width='100%', fig.cap='Sample Raskin cards. The names in these sample cards are fictitious and for demonstration purposes only. '}
+# Removed [@banerjee2018] from caption, does not work in Rmd/LaTeX
 knitr::include_graphics('./assets/indonesia/indonesiafigure1web.png')
 ```
 
@@ -92,9 +93,9 @@ The experiment and data collection process in the two sample cities (Medan and B
 
 To understand the effect of the treatments on take-up, enrollment (i.e., selection), and ultimately the per person cost of insurance to the government, the researchers matched the NIK numbers of sample respondents to the BPJS administrative data on enrollments, monthly premium payments, and claims over the subsequent 32 months to answer three questions (for both the treatment and control groups):
 
-1) Did the household enroll?
-2) Did the household stay enrolled (i.e., did they continue to make their monthly premium payments)?
-3) Did the household utilize the insurance? More specifically, did they visit a health care provider? What was the visit for? How much did the government need to reimburse the provider (i.e., the value of the health claim)?
+1. Did the household enroll?
+2. Did the household stay enrolled (i.e., did they continue to make their monthly premium payments)?
+3. Did the household utilize the insurance? More specifically, did they visit a health care provider? What was the visit for? How much did the government need to reimburse the provider (i.e., the value of the health claim)?
 
 The administrative data had several advantages over conducting a conventional household survey. First, it was much cheaper, since the data used were collected as part of the program administration, instead of just for the experiment. Second, recall bias was not a concern with the administrative data. Imagine the researchers had run an endline survey two and a half years after the treatment instead of using the administrative data. People could have easily forgotten the exact month when they visited the doctor and for what reason. To mitigate recall bias in a survey context, one would conduct frequent endline surveys to capture timely data, but this strategy can easily double or triple survey costs. Instead, with the administrative data, the research team had dated information for the 32-month follow-up period that was not subject to recall bias. Third, an endline survey may have been subject to differential response bias: households who received the treatment might feel indebted or grateful to the researchers and thus more inclined to respond positively to questions about the insurance. The administrative data obviated this concern, as it recorded actual, observed insurance outcomes for everyone.
 
@@ -195,3 +196,7 @@ This is a workaround for citations in footnotes, please ignore.
 @behrman1999
 @gertler2004
 ```
+
+\putbib
+
+

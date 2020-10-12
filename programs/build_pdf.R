@@ -9,7 +9,12 @@ if ( sysinf['sysname'] == 'Darwin' ) {
 }
 
 #run bookdown
-bookdown::render_book('index.Rmd', 'bookdown::gitbook')
+# Using latex_fragment directly will not resolve references
+# bookdown::render_book('index.Rmd', 'latex_fragment')
 
-#bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
+# Using the indirect path will *always* result in a failed compile, which needs to be captured
+options(try.outFile = stdout()) 
+
+try(bookdown::render_book('index.Rmd', 'bookdown::pdf_book'))
+
 # "bookdown::render_book('index.Rmd', 'bookdown::epub_book')
