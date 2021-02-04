@@ -1,48 +1,75 @@
-#!/bin/sh
+#!/bin/bash
 
 set -ev
 LATEX=pdflatex
-FILE=test_book
+FILE=0_master
+OUTFILE=handbook_color_$(date +%F).pdf
+OUTFILEBW=handbook_bw_$(date +%F).pdf
+OUTDIR=_pdf
+
+skip=no
+publish=no
+debug=no
+
+if [ -z $1 ]
+then
+   skip=no
+   publish=no
+   debug=no
+else
+   case $1 in 
+     skip|s)
+      skip=yes
+      ;;
+    publish|p)
+      publish=yes
+      debug=yes
+      ;;
+    debug|d)
+      debug=yes
+      ;;
+    esac
+fi
 
 cd $(dirname $0)
 
-# set up the environment
-Rscript programs/bootstrap.R
+[ -f $FILE.pdf ] && rm -f $FILE.pdf
+[ -f programs/build_pdf.R ] || skip=yes
 
-if [ -f _main.Rmd ]
+if [ "$skip" == "no" ]
 then
-  echo "Removing old file"
-  rm -f _main.Rmd
-fi 
-# build the handbook
-Rscript programs/build_pdf.R > _R.log 2>&1
+   # set up the environment
+   Rscript programs/bootstrap.R
 
-# post-processing
-# For some reason, these appear in the tex files when running as latex_fragment
-#sed -i 's/NULL//' _main.tex
-#sed -i 's/\\chapter\*{(PART) /\\part*{/' _main.tex
-#sed -i 's/\\chapter\*{(APPENDIX) /\\part*{/' _main.tex
-#sed -i 's/^\\chapter{/\putbib\n\\chapter{/' _main.tex 
-#sed -i 's/\\addcontentsline{toc}{chapter}{(PART) /\\partline{/' _main.tex
-#sed -i 's/\\addcontentsline{toc}{chapter}{(APPENDIX) /\\partline{/' _main.tex
-# fix bad reference translations
-#sed -i -E 's/@ref\(fig(.+)\)/\\ref{fig\1}/g' _main.tex 
+  if [ -f _main.Rmd ]
+  then
+    echo "Removing old file"
+    rm -f _main.Rmd
+  fi 
+  # build the handbook
+   echo "::: Running R"
+   [ "$debug" == "yes" ] && Rscript programs/build_pdf.R 
+   [ "$debug" == "no"  ] && Rscript programs/build_pdf.R > _R.log 2>&1
 
 # These are still needed
-
+echo "::: Running fixes"
 sed -i 's/\\part{/\\partline{/' _main.tex
-#sed -i 's/\\addcontentsline{toc}{chapter}{(APPENDIX) /\\partline{/' _main.tex
 
 # Fix the index terms
 # Needs "index_term_mapping.csv"
 
 mv _main.tex _main_pre_index.tex
 
-python3 map_index.py -i _main_pre_index.tex -o _main.tex
+echo "::: Processing indexing"
+python3 programs/map_index.py -i _main_pre_index.tex -o _main.tex
+
+fi 
+# end of skip setup
 
 # now compile it
-
-$LATEX ${FILE}.tex > _tex.log 2>&1
+echo "::: Running latex"
+[ "$debug" == "no"  ] && $LATEX ${FILE}.tex > _tex.log 2>&1
+[ "$debug" == "yes" ] && $LATEX ${FILE}.tex 
 #bibtex ${FILE}     > _bib.log 2>&1 || echo "Completed bibtex with an error"
 [ -f _bib.log ] && rm _bib.log
 for arg in 21 22 23 24
@@ -56,11 +83,26 @@ done
 makeindex ${FILE}
 $LATEX ${FILE}.tex > _tex.log 2>&1
 $LATEX ${FILE}.tex > _tex.log 2>&1
-$LATEX ${FILE}.tex > _tex.log 2>&1
+[ "$debug" == "no"  ] && $LATEX ${FILE}.tex > _tex.log 2>&1
+[ "$debug" == "yes" ] && $LATEX ${FILE}.tex 
 
 if [ -f ${FILE}.pdf ]
 then
   echo "Success."
-  mv ${FILE}.pdf handbook_$(date +%F).pdf
+  echo "::: Renaming file"
+  mv ${FILE}.pdf ${OUTFILE}
+  # convert to greyscale
+  echo "::: Converting to grayscale"
+  programs/pdf_to_grayscale.sh -i ${OUTFILE} -o ${OUTFILEBW}
+else
+  echo "Failure to create PDF"
+  exit 2
 fi
 
+if [ "$publish" == "yes" ]
+then
+  echo "::: Creating publication folder $OUTDIR"
+  [ -d $OUTDIR ] || mkdir $OUTDIR
+  cp $OUTFILE $OUTDIR/
+  cp $OUTFILEBW $OUTDIR/
+fi

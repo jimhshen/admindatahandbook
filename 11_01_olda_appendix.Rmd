@@ -1,6 +1,17 @@
-## Appendix {-}
+```{r,eval=knitr::is_latex_output(),echo=FALSE,results='asis'}
+cat("\\FloatBarrier\\newpage")
+```
+
+## Appendix {- #olda-appendix}
 
 ### Appendix A: Resources and Dashboards {-}
+
+```{r,eval=knitr::is_latex_output(),echo=FALSE,results='asis'}
+cat("\\begin{quote}")
+cat("\\itshape\n")
+cat(paste0("Links to these online resources can be found in the Online Appendix at \\url{",config$base_url,"/",config$print_link,"/olda.html#appendix}.\n"))
+cat("\\end{quote}")
+```
 
 #### Resources {-}
 
@@ -22,11 +33,18 @@
 
 [Central Ohio Compact Dashboard](https://compact.chrr.ohio-state.edu/)
 
-### Appendix B: Case Study Images (Workforce Success Measures) {-}
+### Appendix B: Case Study (Workforce Success Measures) {-}
 
 ```{r echo=FALSE, out.width='100%'}
+if ( knitr::is_html_output() ) {
 knitr::include_graphics('./assets/olda/appendixb.png')
+} 
+
+if ( knitr::is_latex_output() ) {
+  if ( ! file.exists('./figures/olda_appendixb.png')) {
+    file.copy('./assets/olda/appendixb.png','./figures/olda_appendixb.png')
+  }
+  knitr::include_graphics('./figures/olda_appendixb.png')
+} 
 ```
-
-
 

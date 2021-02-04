@@ -19,24 +19,32 @@
 \tcbset{width=\boxwidth}
 \newenvironment{bbox}{\begin{figure}[t]\begin{tcolorbox}}{\end{tcolorbox}\captionsetup{labelformat=empty}\end{figure}}
 
-% workaround
-\newcommand{\partline}[1]{\cftaddtitleline{toc}{part}{#1}{}}
+\newenvironment{bboxfix}{\begin{tcolorbox}}{\end{tcolorbox}}
+
+\newenvironment{indentforeword}{\setlength{\parindent}{15pt}}{}
+
 
 % addtional packages for the book
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 
-
-\usepackage{multirow}
+%\usepackage{longtable}
 \usepackage{wrapfig}
 \usepackage{float}
 \usepackage{colortbl}
 \usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
+%\usepackage{tabu}
+% \usepackage{threeparttable}
+% \usepackage{threeparttablex}
 %\usepackage[normalem]{ulem}
-\usepackage{makecell}
+%\usepackage{makecell}
 \usepackage{xcolor}
+\usepackage{placeins} % for FloatBarrier
 
+% 
+% for tables
+%
+\usepackage{csvsimple}
+%\usepackage{tabulary}
 
 %
 % Workaround
@@ -49,7 +57,7 @@
 % 
 
 %%%%% bib
-\usepackage[]{natbib}
+\usepackage{natbib}
 \setcitestyle{round}
 
 \usepackage[sectionbib,globalcitecopy]{bibunits}
@@ -59,43 +67,145 @@
 \setlength{\bibhang}{6pt}
 
 \renewcommand{\bibpreamble}{\footnotesize} 
-%\renewcommand{\bibname}{References in Chapter \thechapter}
-
-%
-%  automatically add \putbib at end of each chapter
-
-%\ifx\putbib\undefined\else
-%    \let\oldchapter\chapter
-%    \renewcommand{\chapter}{%
-%    \putbib
-%    \oldchapter
-%  }
-%\fi
-
-
-% 
+\let\oldputbib\putbib
+\renewcommand{\putbib}{\FloatBarrier\clearpage\oldputbib}
+ 
 % Change name of bibliography
+\renewcommand{\bibname}{References in Chapter \thechapter}
 
-\renewcommand{\bibname}{References}
 
 %
 % Chapter author tables
 %
-\newenvironment{authorlist}{\renewcommand{\arraystretch}{0.6}\itshape\begin{tabular}{l}}{\end{tabular}}
+\newenvironment{authorlist}{\renewcommand{\arraystretch}{1}\begin{tabular}{l}}{\end{tabular}}
 
 %
 % Handle Unicode in a few cases
 %
 \DeclareUnicodeCharacter{03C4}{$\tau$}
 \DeclareUnicodeCharacter{03BC}{$\mu$}
+\DeclareUnicodeCharacter{03B5}{$\epsilon$}
+
+% 
+% This handles the euro
+%
+% WARNING: this might affect other font choices!
+%
+\usepackage{textcomp}
+\usepackage{eurosym}
+\let\texteuro\euro
+\DeclareUnicodeCharacter{020AC}{\euro}
+
+% % use upquote if available, for straight quotes in verbatim environments
+%\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+%
+% ========================  set widths ======================
+%
+% These lines came from Pandoc
+
+\usepackage{graphicx,grffile}
+% \makeatletter
+% \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+% \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+% \makeatother
+% \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{t}
+\makeatother
+
 
 %
 %  Override figure width
 %
-\setkeys{Gin}{width=0.9\textwidth}
+\newcommand{\ourfigurewidth}{0.8\textwidth}
+\setkeys{Gin}{width=\ourfigurewidth,keepaspectratio}
+
+% 
+% Default tablewidth for tables that require it
+% i.e., using tabulary
+\newcommand{\ourtablewidth}{1.0\textwidth}
 
 %
 % crop marks - do we need these?
 %
 %\usepackage[cam,letter,center]{crop}
 
+% PARAMETERS
+% Figure 1 in PCRI
+\newcommand{\widthpcria}{0.6\textwidth}
+% Figure 2 in PCRI
+\newcommand{\widthpcrib}{\ourfigurewidth}
+% Figure A1 in PCRI
+\newcommand{\widthpcriaa}{\ourfigurewidth}
+% Figure A2 in PCRI
+\newcommand{\widthpcriab}{\ourfigurewidth}
+% Figure A3 in PCRI
+\newcommand{\widthpcriac}{\ourfigurewidth}
+
+
+
+
+
+%
+% to prevent hyphenation in certain sections
+% Wrap this around chapter titles
+% with \begin{nohyphens}
+% \chapter{...}
+% \end{nohyphens}
+
+% https://tex.stackexchange.com/questions/91307/temporarily-suppress-hyphenation
+\makeatletter
+\@ifpackageloaded{babel}
+  {\newenvironment{nohyphens}
+     {\par\sloppy\exhyphenpenalty=\@M
+      \@ifundefined{l@nohyphenation}
+        {\language=\@cclv}
+        {\hyphenrules{nohyphenation}}%
+     }
+     {\par
+      \@ifundefined{l@nohyphenation}
+        {}
+        {\endhyphenrules}%
+     }
+  }
+  {\newenvironment{nohyphens}
+     {\par\sloppy\exhyphenpenalty=\@M
+      \@ifundefined{l@nohyphenation}
+        {\language=\@cclv}
+        {\language=\l@nohyphenation}%
+     }
+     {\par}
+  }
+\makeatother
+
+%
+% Function to create titlefootnote based on the short tag
+% Requires: nameref
+\usepackage{nameref}
+\makeatletter
+\newcommand{\authorfootnote}[3]{%
+% 1: authors (in cmos notation)
+% 2: authors (in and notation)
+% 3: the chapter reference
+  \begingroup
+  \def\@makefntext##1{\noindent ##1}%
+  \renewcommand{\thefootnote}{}%
+  \footnote{Copyright \copyright ~ #2. \newline 
+  Cite as: #1. ``\nameref{#3}.'' In: \bookcitation{}}%
+  \addtocounter{footnote}{-1}%
+  \addtocounter{Hfootnote}{-1}%
+  \endgroup
+}
+\makeatother
+
+%
+% this is needed for BeginKnitrBlock
+%
+%\let\BeginKnitrBlock\begin
+%\let\EndKnitrBlock\end
