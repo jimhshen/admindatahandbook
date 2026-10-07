@@ -367,7 +367,7 @@ Approximately a dozen full-time staff maintain the data access mechanism. OLDA r
 #### Private Capital Research Institute (PCRI)
 
 ```{r, securitypcriplot, echo=FALSE, fig.width=3, fig.height=2,out.extra='style="float:left; padding:10px"',eval=knitr::is_html_output()}
-plot_summary("PCRI",pcri,2,2,3,3,2)
+#plot_summary("PCRI",pcri,2,2,3,3,2)
 knitr::include_graphics('./assets/security/badge_pcriweb.png')
 ```
 
@@ -423,8 +423,10 @@ The NCES restricted licenses require minimal resources for the data access mecha
 
 Table \@ref(tab:securitysummarytable) provides a summary of the five asppects of the data access mechanisms covered in this chapter. Additionally, it includes data access mechanisms from case studies in the rest of the Handbook that were not covered in this chapter due to having very similar implementations as those described above. Note some case studies, such as the International Monetary Fund, utilize a wide range of access mechanisms (varying across different data providers) and are not categorized in this table.
 
-```{r, securitysummarytable, echo=F, fig.cap="Summary of Access Mechanisms Along the Five Aspects",results='asis'}
-plotallmechs(is_html_output())
+
+```{r securitysummarytable, echo=F, fig.cap="Summary of Access Mechanisms Along the Five Aspects",results='asis'}
+message(paste0("outputformat="),outputformat)
+plotallmechs(outputformat)
 ```
 
 ## Guidance for Data Providers and Researchers
@@ -439,6 +441,9 @@ The necessary aspects of a data access mechanism and the restrictions that are p
 
 A final related point is that the enforcement of the terms of the +DUA| is an important factor in determining the flexibility in the data access system. More sophisticated DUAs and greater strength of enforcement enables increased flexibility in the data access mechanism while maintaining strong protections. This corresponds to a trade-off between the investment in physical infrastructure and human resources necessary for tight control over a data access mechanism versus the investment in the institutional and legal framework of data access. In the partnerships above, the necessary protections in the data access mechanism are established in large part by the DUA.
 
+```{r, eval = outputformat == "html", echo=FALSE, results='asis'}
+printsupp("security")
+```
 ## About the Authors {-}
 
 [Jim Shen](https://www.povertyactionlab.org/person/shen) is the Senior Manager for the [Innovations in Data and Experiments for Action Initiative (IDEA)](https://www.povertyactionlab.org/initiative/innovations-data-experiments-action) at the Abdul Latif Jameel Poverty Action Lab based at MIT. He was the Data Manager for the Center for Education Policy Analysis (CEPA) from January 2015 to August 2019 where he managed the CEPA data warehouse. He was responsible for the day-to-day operations of the CEPA data warehouse, serving as the point of contact for Stanford researchers utilizing San Francisco Unified School District (SFUSD) data and SFUSD staff for data exchanges. Jim holds a BA in history and international relations and an MA in political science from the University of California, San Diego.

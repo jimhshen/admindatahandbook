@@ -1,10 +1,12 @@
 default:
-  base_url: "https://admindatahandbook.mit.edu/book/"
+  base_url: "https://admindatahandbook.mit.edu/book"
   title: "Handbook on Using Administrative Data for Research and Evidence-based Policy"
   editors: "Cole, Dhaliwal, Sautmann, and Vilhuber"
   last_update: !expr Sys.Date()
-  print_link: "latest"
-  first_publish_date: "November 2020"
+  print_link: "v1.0"
+  version_link: "v1.1"
+  latest_print_date: "January 2021"
+  first_publish_date: "August 2022"
   colors:
     aspect_low: "#e0f3db"  #low flexibility, light green, formerly "#33a02c"
     aspect_med: "#a8ddb5" #med flexibility, dark green blue, formerly "#a6cee3"
@@ -25,10 +27,16 @@ default:
       - kelseyjack
       - derekstrong
       - brendanmaughanbrown
+    webinar: "https://www.youtube.com/watch?v=NKiHz8eSJXI&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=1"
+    slides: ./appendix/cct_slides.pdf
+    webinardate: "September 28, 2020"
   ahc:
     authors:
       - laurafeeney
       - amyfinkelstein
+    webinar: "https://www.youtube.com/watch?v=Pl1QvLMBdLg&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=7"
+    slides: ./appendix/ahc_slides.pdf
+    webinardate: "November 16, 2020"
   sfusd:
     authors:
       - moonhawkkim
@@ -37,52 +45,88 @@ default:
       - normaming
       - michellereininger
       - ericbettinger
+    webinar: "https://www.youtube.com/watch?v=qYfwWLZaxxQ&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=3"
+    slides: ./appendix/stanford-sfusd_slides.pdf
+    webinardate: "October 19, 2020"
   imf:
     authors:
       - eradablanorris
       - federicojdiez
       - romainduval
     copyright: International Monetary Fund
+    webinar: 
+    slides: 
+    webinardate:
   iab:
     authors:
       - danamuller
       - philippvomberge
+    webinar: "https://www.youtube.com/watch?v=tTuayub1iRo&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=9"
+    slides: 
+    webinardate: "December 7, 2020"
   dime:
     authors:
       - ariannalegovini
       - mariaruthjones
+    webinar: "https://www.youtube.com/watch?v=RBWzR4FC20w&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=8"
+    slides: ./appendix/dime_slides.pdf
+    webinardate: "November 30, 2020"
   irb:
     authors:
       - kathleenmurphy
+    webinar: "https://www.youtube.com/watch?v=VLQtkwQyQvo&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=6"
+    slides: ./appendix/irb_slides.pdf
+    webinardate: "November 9, 2020"
   dua:
     authors:
       - amyohara
+    webinar: "https://www.youtube.com/watch?v=zzJy6ECdd80&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=5"
+    slides: ./appendix/dua_slides.pdf
+    webinardate: "October 26, 2020"
   nbirdt:
     authors:
       - donnacurtismailet
       - jamestedmcdonald
+    webinar: "https://www.youtube.com/watch?v=jYBg-p94gHQ&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=10"
+    slides: ./appendix/nbirdt_slides.pdf
+    webinardate: "November 23, 2020"
   olda:
     authors:
       - joshuadhawley
+    webinar: "https://www.youtube.com/watch?v=ZtLndEL28lM&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=2"
+    slides: ./appendix/olda_slides.pdf
+    webinardate: "October 5, 2020"
   pcri:
     authors:
       - joshlerner
       - lesliejeng
       - theresejuneau
+    webinar:
+    slides:
+    webinardate:
   security:
     authors:
       - jimshen
       - larsvilhuber
+    webinar:
+    slides: ./appendix/security_slides.pdf
+    webinardate: "February 8, 2021"
   discavoid:
     authors:
       - ianmschmutte
       - larsvilhuber
+    webinar: "https://www.youtube.com/watch?v=GK-N-SN3BrY&list=PL5Dr5MK6NSsqd9eJf_VwPVpp7EXMXM5Hg&index=4"
+    slides: ./appendix/discavoid_slides.pdf
+    webinardate: "November 2, 2020"
   diffpriv:
     authors:
       - alexandrawood
       - micahaltman
       - kobbinissim
       - salilvadhan
+    webinar:
+    slides: ./appendix/diffpriv_slides.pdf
+    webinardate: "February 1, 2021"
   indonesia:
     authors:
       - vivialatas
@@ -92,6 +136,23 @@ default:
       - remahanna
       - sudarnosumarto
       - putupoppywidyasari
+    webinar:
+    webinardate: "January 25, 2021"
+  massachusetts:
+    authors:
+      - amandalee
+    webinar:
+    webinardate:
+    first_publish_date: "August 2022"
+    early: true
+  puertorico:
+    authors:
+      - danielatrevino
+    webinar:
+    webinardate:
+    first_publish_date: "August 2022"
+    early: true
+
   contributors:
     larsvilhuber:
       name: Lars Vilhuber
@@ -228,3 +289,13 @@ default:
       name: Daniel L. Goroff
       inst: Alfred P. Sloan Foundation
       title: Vice President and Program Director
+    danielatrevino:
+      name: Daniela Gómez Treviño
+      inst: J-PAL North America, Massachusetts Institute of Technology
+      title: Research Manager
+    amandalee:
+      name: Amanda Lee
+      inst: J-PAL North America, Massachusetts Institute of Technology
+      title: Research Manager
+
+

@@ -12,7 +12,7 @@ printauthor<-function(chapter,debug=FALSE){
       return(knitr::is_latex_output())
     }
   }
-  
+
   authorlist <- config::get(chapter)$authors
   
   authors.and <- ""
@@ -51,9 +51,11 @@ printauthor<-function(chapter,debug=FALSE){
     if ( debug ) { print(paste0("nameinst=",nameinst)) }
     
 
-  # output to HTML document
+  # output to HTML document / Ebook
+  if ( ! debug ) {
   if (knitr::is_html_output()) {
     cat(paste0("*",nameinst,"*  \n"))
+  }
   }
       
 # output to LaTeX document
@@ -104,7 +106,9 @@ printauthor<-function(chapter,debug=FALSE){
  
   # handle copyright
   copyright <- config::get(chapter)$copyright
+  copyright.default = FALSE
   if ( is.null(copyright)) { 
+    copyright.default = TRUE
     copyright <- authors.comma
   }
 
@@ -132,25 +136,66 @@ printauthor<-function(chapter,debug=FALSE){
 
 
 
-  # The publication is read from the config file. We might also read the DOI from there.
-  pubdate <- config$first_publish_date %>%  str_split_fixed(" ",2) 
+  # The publication is read from the config file, first from chapter, otherwise from overall. We might also read the DOI from there.
+  pubdate.local  <- config::get(chapter)$first_publish_date 
+  pubdate.global <- config$first_publish_date 
+  if (is.null(pubdate.local)) {
+    pubdate.local <- pubdate.global
+  }
+  pubdate <- pubdate.local %>%  str_split_fixed(" ",2) 
 
 
-
-  if (knitr::is_html_output()) {
+  # The citation thing is only output to the HTML
+  if ( outputformat == "html" ) {
     cat(readLines("./includes/citation-block-link.html"))
     cat('<div id="myCitation" style="display: none;">')
     cat(paste0(authors.cmos,". ",pubdate[2],". ","\"<span id=\"chapTitle\">Title</span>.\" In: "))
-    cat(paste0(config$editors," (eds), *",config$title,"*. Accessed at <span id=\"thisURL\"></span> on <span id=\"todayDate\"></span>.<br />"))
+    cat(paste0(config$editors," (eds), *",config$title,"*"))
+    # cat(paste0("."))
+    cat(paste0(", Version ",config$version_link,". "))
+    cat(paste0("Accessed at <span id=\"thisURL\"></span> on <span id=\"todayDate\"></span>.<br />"))
     cat(paste0("<span class=\"copyright\">©️ ",copyright,". Licensed under "))
     if ( license.cc != "" ) {
-      cat(paste0("<a href=\"https://creativecommons.org/licenses/",license.cc,"/4.0/\"><img alt=\"",toupper(license.chapter)," logo\" src=\"assets/",license.chapter,".png\" height=\"12px\"/></a>"))
+      cat(paste0("<a href=\"https://creativecommons.org/licenses/",license.cc,"/4.0/\"><img alt=\"",toupper(license.chapter)," logo\" src=\"assets/",license.chapter,".png\" height=\"12\"/></a>"))
     } else {
       cat(paste0(toupper(license.chapter)))
     }
     cat(paste0(".</span>"))
     cat('</div>')
   }
+  # Output information if this is an early-stage chapter
+  early <- config::get(chapter)$early
+  if ( is.null(early) ) { early <- FALSE }
+  if ( early) {
+    # if true, output the block with standard sentence:
+    if ( outputformat == "html" ) {
+    cat('<div id="early">')
+    cat("This chapter describes challenges and considerations faced by an early stage and in-progress project. ")
+    cat(paste0("It was first published on ",pubdate.local," "))
+    cat(paste0("and is not included in the ",config$latest_print_date,"  print version."))
+    cat('</div>')
+    }
+  }
+  
+  # If this is for the ebook, do this:
+  if ( outputformat == "epub3" ) {
+    if (debug) { print("outputformat=epub3")}
+    if (debug) { print(paste0("copyright.default=",copyright.default))}
+    if ( copyright.default == FALSE ) {
+      cat('<div id="myCitation" style="display: block;">')
+      cat(paste0("<span class=\"copyright\">©️ ",copyright,". "))
+      if ( license.cc != "" ) {
+        cat("Licensed under ")
+        cat(paste0("<a href=\"https://creativecommons.org/licenses/",license.cc,"/4.0/\"><img alt=\"",toupper(license.chapter)," logo\" src=\"assets/",license.chapter,".png\" height=\"12\"/></a>"))
+      } else {
+      # do nothing in ebook
+      #cat(paste0(toupper(license.chapter)))
+      }
+      cat(paste0(".</span>"))
+      cat('</div>')
+    }
+  }
+  
 
   if (my_is_latex_output(debug)) {
     # finishing up the latex version

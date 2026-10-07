@@ -82,24 +82,12 @@ pre code {
 }
 
 
-/* used for citations */
-#myCitation {
-  display: none;
-  padding: 1em;
-  background-color: #f4f4f4;
-  color: black;
-}
 
-#citationDate {
-background-color: #f8afaf;
-}
+/* Add a demarcation before footnotes/endnotes */
 
-#citationLink {
-    margin-bottom: 1em;
-}
-
-/* used for copyright notice in TOC */
-
-.copyright {
-  font-size: 10px;
+.footnotes ol::before {
+  content: "Chapter Endnotes";
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-left: -3rem;
 }
